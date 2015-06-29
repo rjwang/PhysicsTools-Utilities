@@ -18,8 +18,17 @@ options.parseArguments()
 
 process = cms.Process("PickEvent")
 process.source = cms.Source ("PoolSource",
+	  duplicateCheckMode = cms.untracked.string('noDuplicateCheck'),
 	  fileNames = cms.untracked.vstring (options.inputFiles),
 )
+
+
+process.load("FWCore.MessageService.MessageLogger_cfi")
+process.MessageLogger.cerr.FwkReport.reportEvery = 10000
+process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True),
+                                        SkipEvent = cms.untracked.vstring('ProductNotFound'),
+                                        )
+
 
 if options.eventsToProcess:
     process.source.eventsToProcess = \
